@@ -45,7 +45,7 @@ https://github.com/do3642/hello-seoul-frontend
 먼저, GitHub에서 백엔드 프로젝트를 클론합니다.
 
   ```bash
-  git clone https://github.com/your-username/hello-seoul-backend.git
+  git clone https://github.com/do3642/hello-seoul-backend.git
   ```
 
 #### 1.2 **STS에서 프로젝트 열기**
