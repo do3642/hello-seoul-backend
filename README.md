@@ -5,6 +5,8 @@
 이 프로젝트는 **서울 관광지 소개 사이트**를 개발하는 프로젝트입니다.  
 사용자들에게 서울의 주요 관광지, 축제를 소개하고, 관광지에 대한 정보를 각 구별, 검색을 통해 제공합니다.  
 프로젝트는 **React**와 **Spring Boot**를 사용하여 프론트엔드와 백엔드를 구현합니다.
+프론트 레포지토리
+https://github.com/do3642/hello-seoul-frontend
 
 ## ⏳ 작업 기간 및 내용
 
@@ -50,13 +52,13 @@
 1. STS(Spring Tool Suite)를 실행합니다.
 2. `File` -> `Import`를 클릭합니다.
 3. `Existing Gradle Project`를 선택한 후 `Next`를 클릭합니다.
-4. `Root Directory`에서 `hello-seoul-backend` 프로젝트를 선택하고 `Finish`를 클릭합니다.
+4. `Project root Directory`에서 `hello-seoul-backend` 프로젝트를 선택하고 `Finish`를 클릭합니다.
 
 #### 1.3 **`application.properties` 설정**
 프로젝트의 `src/main/resources` 폴더에 `application.properties` 파일을 위치시킵니다. 아래 내용을 추가합니다.
 
 ```bash
-spring.application.name=helloseoul
+spring.application.name=hello-seoul-backend
 
 # 서버 설정
 server.port=8888
