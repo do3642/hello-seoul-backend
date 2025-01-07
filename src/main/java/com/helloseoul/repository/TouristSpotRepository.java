@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.helloseoul.domain.TouristSpot;
 
 @Repository
-public interface TouristSpotRepository extends JpaRepository<TouristSpot, Long>{
+public interface TouristSpotRepository extends JpaRepository<TouristSpot, Integer>{
 
 }
