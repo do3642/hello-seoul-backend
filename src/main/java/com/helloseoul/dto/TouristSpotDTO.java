@@ -15,14 +15,14 @@ public class TouristSpotDTO {
 	private String postSj;
 	private String address;
 	private String newAddress;
-	private String tel;
-	private String url;
-	private String time;
-	private String day;
-	private String restDay;
+	private String cmmnTelno;
+	private String cmmnHmpgUrl;
+	private String cmmnUseTime;
+	private String cmmnBsnde;
+	private String cmmnRstde;
 	private String subwayInfo;
 	private String tag;
-	private String BF_DESC;
+	private String bfDesc;
 	
 }
 
