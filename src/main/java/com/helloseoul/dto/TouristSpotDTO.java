@@ -1,10 +1,12 @@
 package com.helloseoul.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TouristSpotDTO {
@@ -22,10 +24,5 @@ public class TouristSpotDTO {
 	private String tag;
 	private String BF_DESC;
 	
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public class TouristSpotResponseDTO {
-		private List<TouristSpotDTO> row;
-	}
 }
 
