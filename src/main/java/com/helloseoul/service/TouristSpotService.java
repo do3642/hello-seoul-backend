@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.helloseoul.domain.TouristSpot;
 import com.helloseoul.repository.TouristSpotRepository;
+import com.helloseoul.util.AddressParser;
 
 @Service
 public class TouristSpotService {
@@ -49,6 +50,11 @@ public class TouristSpotService {
 			for(int i = 0; i < rows.size(); i++) {
 				JsonObject row = rows.get(i).getAsJsonObject();
 				TouristSpot spot = gson.fromJson(row, TouristSpot.class);
+				
+				// 구 이름 추출 및 설정
+				String guName = AddressParser.extractGuName(spot.getAddress());
+				spot.setGuName(guName);
+				
 				touristSpotRepository.save(spot);
 			}
 			
