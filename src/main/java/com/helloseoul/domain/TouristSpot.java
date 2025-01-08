@@ -19,6 +19,7 @@ public class TouristSpot {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	private String guName; // 구 이름
 	private String lanCodeId; // 언어코드
 	private String postSj; // 관광지 이름
 	private String address; // 주소(지번주소)
