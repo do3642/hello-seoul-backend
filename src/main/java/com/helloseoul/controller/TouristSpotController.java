@@ -12,7 +12,7 @@ public class TouristSpotController {
 	@Autowired
 	private TouristSpotService touristSpotService;
 	
-	@GetMapping("/save-tourist-spots")
+	@GetMapping("/api/fetch-tourist-spots")
 	public String fetchTouristSpots() {
 		touristSpotService.fetchAndSaveTouristSpots();
 		
