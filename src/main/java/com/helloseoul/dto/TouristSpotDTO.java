@@ -11,18 +11,25 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TouristSpotDTO {
 	
-	private String lanCodeId;
-	private String postSj;
-	private String address;
-	private String newAddress;
-	private String cmmnTelno;
-	private String cmmnHmpgUrl;
-	private String cmmnUseTime;
-	private String cmmnBsnde;
-	private String cmmnRstde;
-	private String subwayInfo;
-	private String tag;
-	private String bfDesc;
+	private String title;
 	
+	private String addr1;
+	
+	private String addr2;
+	
+	private String tel;
+	
+	private String contentid;
+	
+	private String contenttypeid;
+	
+	private String firstimage;
+	
+	private String firstimage2;
+	
+	private double mapx;
+	
+	private double mapy;
+
 }
 
