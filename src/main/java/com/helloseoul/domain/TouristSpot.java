@@ -21,6 +21,8 @@ public class TouristSpot {
 	
 	private String guName; // 구 이름
 	
+	private int areacode; // 지역 코드
+	
 	private String languageCode; // 언어코드
 	
 	private String title; // 관광지 이름

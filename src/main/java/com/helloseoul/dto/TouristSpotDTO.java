@@ -17,6 +17,8 @@ public class TouristSpotDTO {
 	
 	private String addr2;
 	
+	private int areacode;
+	
 	private String tel;
 	
 	private String contentid;
