@@ -1,77 +1,61 @@
 package com.helloseoul.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.helloseoul.domain.TouristSpot;
-import com.helloseoul.dto.TouristSpotDTO;
-import com.helloseoul.dto.TouristSpotResponseDTO;
 import com.helloseoul.repository.TouristSpotRepository;
 
 @Service
 public class TouristSpotService {
-	
 	@Autowired
 	private TouristSpotRepository touristSpotRepository;
 	
-	@Value("${api.key}")
+	@Value("${tourist.api.key}")
 	private String apiKey;
 	
-	private String apiUrl = "http://openapi.seoul.go.kr:8088/{apiKey}/json/TbVwAttractions/{startIndex}/{endIndex}/";
+	private String apiUrl = "http://openapi.seoul.go.kr:8088/{apiKey}/json/TbVwAttractions/{startIndex}/{endIndex}";
 	
-	public void fetchAndSaveTouristSpots(int startIndex, int endIndex) {
+	private final Gson gson = new Gson();
+	
+	public void fetchAndSaveTouristSpots() {
+		// URL 호출하고 JSON 응답을 가져오기 위한 작업.
 		RestTemplate restTemplate = new RestTemplate();
 		
-		ResponseEntity<TouristSpotResponseDTO> response = restTemplate.getForEntity(apiUrl, apiKey, TouristSpotResponseDTO.class, startIndex, endIndex);
-		
-		if(response.getBody() != null) {
-			TouristSpotResponseDTO data = response.getBody();
-			int totalCount = data.getListTotalCount();
-			
-			for(TouristSpotDTO dto : data.getRow()) {
-				TouristSpot spot = new TouristSpot();
-				spot.setLanCodeId(dto.getLanCodeId());
-				spot.setPostSj(dto.getPostSj());
-				spot.setAddress(dto.getAddress());
-				spot.setNewAddress(dto.getNewAddress());
-				spot.setCmmnTelno(dto.getCmmnTelno());
-				spot.setCmmnHmpgUrl(dto.getCmmnHmpgUrl());
-				spot.setCmmnUseTime(dto.getCmmnUseTime());
-				spot.setCmmnBsnde(dto.getCmmnBsnde());
-				spot.setCmmnRstde(dto.getCmmnRstde());
-				spot.setSubwayInfo(dto.getSubwayInfo());
-				spot.setTag(dto.getTag());
-				spot.setBfDesc(dto.getBfDesc());
-				
-				//DB 저장
-				touristSpotRepository.save(spot);
-			}
-		}
-		
-	}
-	
-	public void fetchAllTouristSpots() {
 		int startIndex = 1;
 		int endIndex = 500;
-		int totalDataCount = Integer.MAX_VALUE;
 		
-		// 전체 데이터를 가져올 때까지 반복
-		while(startIndex <= totalDataCount) {
-			fetchAndSaveTouristSpots(startIndex, endIndex);
+		while (true) {
+			// API 호출
+			String url = String.format(apiUrl, apiKey, startIndex, endIndex);
+			String response = restTemplate.getForObject(url, String.class);	
+			
+			// JSON 파싱하여 데이터 처리
+			JsonObject jsonObject = gson.fromJson(response, JsonObject.class);
+			JsonObject data = jsonObject.getAsJsonObject("TbVwAttractions");
+			JsonArray rows = data.getAsJsonArray("row");
+			
+			// 더 이상 가져올 json 데이터가 없으면 종료
+			if (rows == null || rows.size() == 0) {
+				break;
+			}
+			
+			// 데이터 DB에 저장
+			for(int i = 0; i < rows.size(); i++) {
+				JsonObject row = rows.get(i).getAsJsonObject();
+				TouristSpot spot = gson.fromJson(row, TouristSpot.class);
+				touristSpotRepository.save(spot);
+			}
+			
+			// 다음 인덱스를 저장하기 위해 업데이트 해줌.
 			startIndex += 500;
 			endIndex += 500;
-			
-			// 마지막 페이지 처리 (데이터가 500개 미만일 경우)
-			if (endIndex > totalDataCount) {
-				endIndex = totalDataCount;
-			}
 		}
 	}
 	
-
 }
