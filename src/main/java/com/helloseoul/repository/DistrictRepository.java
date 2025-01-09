@@ -10,5 +10,5 @@ import com.helloseoul.domain.DistrictEntity;
 
 @Repository
 public interface DistrictRepository extends JpaRepository<DistrictEntity, Integer> {
-	Optional<DistrictEntity> findByCode(Integer code);
+	Optional<DistrictEntity> findByCode(String areaCode);
 }

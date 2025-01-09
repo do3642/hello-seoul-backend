@@ -17,7 +17,7 @@ public class TouristSpotDTO {
 	
 	private String addr2;
 	
-	private int areacode;
+	private String sigungucode;
 	
 	private String tel;
 	
@@ -32,6 +32,7 @@ public class TouristSpotDTO {
 	private double mapx;
 	
 	private double mapy;
+	
 
 }
 

@@ -19,7 +19,7 @@ public class DistrictEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	private int code;
+	private String code;
 	
 	private String name;
 	
