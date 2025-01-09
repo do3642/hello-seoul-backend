@@ -34,7 +34,7 @@ public class TouristSpotService {
 	
 	public void fetchAndSaveTouristSpots() {
 		String[] apiUrls = {
-			String.format("http://apis.data.go.kr/B551011/KorService1/areaBasedList1?numOfRows=5000&MobileOS=ETC&MobileApp=AppTest&serviceKey=%s&_type=json&areaCode=1&pageNo=", apiKey)
+			String.format("http://apis.data.go.kr/B551011/KorService1/areaBasedList1?numOfRows=10000&MobileOS=ETC&MobileApp=AppTest&serviceKey=%s&_type=json&areaCode=1&pageNo=", apiKey)
 			
 		};
 		
