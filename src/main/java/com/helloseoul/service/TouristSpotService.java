@@ -2,6 +2,7 @@ package com.helloseoul.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class TouristSpotService {
 		}
 	}
 	
+	// 언어 코드에 맞는 데이터를 저장
 	public void fetchAndSaveTouristSpots(String languageCode) {
 		String apiUrl = getApiUrl(languageCode);
 		
@@ -98,5 +100,12 @@ public class TouristSpotService {
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	//모든 데이터를 조회(언어 코드 필요 없음)
+	public List<TouristSpot> getTouristSpotsByLanguage(String languageCode) {
+		// DB에서 언어 코드에 맞는 데이터를 조회.
+		return touristSpotRepository.findByLanguageCode(languageCode);
 	}
 }
