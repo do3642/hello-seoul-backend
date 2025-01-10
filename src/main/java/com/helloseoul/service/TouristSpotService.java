@@ -2,11 +2,12 @@ package com.helloseoul.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -104,8 +105,9 @@ public class TouristSpotService {
 	
 	
 	//모든 데이터를 조회(언어 코드 필요 없음)
-	public List<TouristSpot> getTouristSpotsByLanguage(String languageCode) {
+	public Page<TouristSpot> getTouristSpotsByLanguage(String languageCode, int page, int size) {
 		// DB에서 언어 코드에 맞는 데이터를 조회.
-		return touristSpotRepository.findByLanguageCode(languageCode);
+		// 페이지네이션이 적용된 관광지 데이터를 반환
+		return touristSpotRepository.findByLanguageCode(languageCode, PageRequest.of(page, size));
 	}
 }

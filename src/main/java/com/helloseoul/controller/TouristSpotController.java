@@ -1,8 +1,7 @@
 package com.helloseoul.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,12 +33,16 @@ public class TouristSpotController {
 	        }
 	    }
 	    
-	    // 데이터 조회 시: 언어코드 없이 모든 관광지 데이터 반환
+	    // 데이터 조회 시: 언어코드 없이 모든 관광지 데이터 반환(페이지네이션 포함)
 	    @GetMapping("/api/touristspotdata")
-	    public ResponseEntity<List<TouristSpot>> getTouristSpots(@RequestParam String languageCode) {
+	    public ResponseEntity<Page<TouristSpot>> getTouristSpots(
+	    		@RequestParam String languageCode,
+	    		@RequestParam(defaultValue = "0") int page,
+	    		@RequestParam(defaultValue = "10") int size
+	    		) {
 	    	try {
 	    		// 모든 관광지 가져오기
-	    		List<TouristSpot> touristSpots = touristSpotService.getTouristSpotsByLanguage(languageCode);
+	    		Page<TouristSpot> touristSpots = touristSpotService.getTouristSpotsByLanguage(languageCode, page, size);
 	    		return ResponseEntity.ok(touristSpots);
 	    	} catch (Exception e) {
 	    		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
