@@ -24,10 +24,28 @@ public class SpotsController {
 	
     // 관광지 데이터 요청 API
     @GetMapping("/tourist-spots")
-    public List<TouristSpot> getTouristSpots(@RequestParam("lang") String languageCode) {
-        return spotsService.getRandomTouristSpots(languageCode);
+    public List<TouristSpot> getTouristSpots(
+    		@RequestParam("lang") String languageCode,
+    		@RequestParam("page") int page,
+    		@RequestParam("size") int size,
+    		@RequestParam(value = "excludeIds", required = false) List<Integer> excludeIds) {
+        return spotsService.getRandomTouristSpots(languageCode, page, size,excludeIds);
     }
     
+    // 축제 데이터 요청
+    @GetMapping("/festivals")
+    public List<TouristSpot> getFestivals(
+    		@RequestParam("lang") String languageCode,
+    		@RequestParam("page") int page,
+    		@RequestParam("size") int size,
+    		@RequestParam(value = "excludeIds", required = false) List<Integer> excludeIds) {
+    	System.out.println(excludeIds);
+        return spotsService.getFestivalsByLanguage(languageCode, page, size,excludeIds);
+    }
+    
+    
+    
+
 
 
 }

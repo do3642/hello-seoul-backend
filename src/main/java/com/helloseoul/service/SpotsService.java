@@ -25,10 +25,11 @@ public class SpotsService {
     private DistrictRepository districtRepository;
 
     
-    public List<TouristSpot> getRandomTouristSpots(String languageCode) {
+    public List<TouristSpot> getRandomTouristSpots(String languageCode, int page, int size, List<Integer> excludeIds) {
         // 랜덤 4개 관광지 데이터 가져오기 (구 이름도 함께)
-        Pageable pageable = PageRequest.of(0, 4);  // 첫 페이지, 4개 아이템
-        List<TouristSpot> touristSpots = touristSpotRepository.findRandomTouristSpotsByLanguage(languageCode, pageable);
+//        Pageable pageable = PageRequest.of(0, 4);  // 첫 페이지, 4개 아이템
+    	Pageable pageable = PageRequest.of(page, size);
+        List<TouristSpot> touristSpots = touristSpotRepository.findRandomTouristSpotsByLanguage(languageCode,excludeIds, pageable);
 
         // 구 이름을 한번에 가져오는 방법을 추가하거나, 여기서 각 관광지마다 구 이름을 설정
         return touristSpots.stream()
@@ -39,4 +40,19 @@ public class SpotsService {
                 })
                 .collect(Collectors.toList());
     }
+    
+    public List<TouristSpot> getFestivalsByLanguage(String languageCode, int page, int size, List<Integer> excludeIds) {
+    	Pageable pageable = PageRequest.of(page, size);
+        List<TouristSpot> festivals = touristSpotRepository.findFestivalsByLanguage(languageCode,excludeIds, pageable);
+
+        return festivals.stream()
+                .map(touristSpot -> {
+                    Optional<DistrictEntity> district = districtRepository.findByCode(touristSpot.getSigungucode());
+                    district.ifPresent(value -> touristSpot.setGuName(value.getName())); // 구 이름 설정
+                    return touristSpot;
+                })
+                .collect(Collectors.toList());
+    }
+
+    
 }
