@@ -12,6 +12,10 @@ import com.helloseoul.domain.TouristSpot;
 
 @Repository
 public interface TouristSpotRepository extends JpaRepository<TouristSpot, Integer> {
+	
+	// contenttypeid가 12 또는 15인 데이터만 찾기
+    List<TouristSpot> findByContenttypeidIn(List<String> contentTypeIds);
+    
 
     // language_code에 맞는 랜덤 관광지 4개를 가져오는 쿼리
     @Query(value = "SELECT * FROM tourist_spot " +
@@ -38,4 +42,13 @@ public interface TouristSpotRepository extends JpaRepository<TouristSpot, Intege
     List<TouristSpot> findFestivalsByLanguage(@Param("languageCode") String languageCode,
     		@Param("excludeIds") List<Integer> excludeIds,
     		Pageable pageable);
+    
+    
+    // 계절에 맞는 관광지 필터링 (전체 데이터에서 한글 계절 정보로 필터링)
+    @Query(value = "SELECT * FROM tourist_spot " +
+                   "WHERE title LIKE CONCAT('%', :season, '%') " +  // title에서 계절 텍스트 포함 여부 확인
+                   "ORDER BY RAND()", nativeQuery = true)
+    List<TouristSpot> findSeasonalTouristSpots(@Param("season") String season,  // 계절 정보
+                                               Pageable pageable);
+
 }

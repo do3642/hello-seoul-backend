@@ -39,9 +39,17 @@ public class SpotsController {
     		@RequestParam("page") int page,
     		@RequestParam("size") int size,
     		@RequestParam(value = "excludeIds", required = false) List<Integer> excludeIds) {
-    	System.out.println(excludeIds);
         return spotsService.getFestivalsByLanguage(languageCode, page, size,excludeIds);
     }
+    
+    // 계절 데이터 요청
+    @GetMapping("/season-spots")
+    public List<TouristSpot> getSeason(
+    		@RequestParam("seasonKR") String seasonKR){
+    	
+    	return spotsService.getSeasonalTouristSpots(seasonKR);
+    }
+    
     
     
     

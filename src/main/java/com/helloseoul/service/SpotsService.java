@@ -55,4 +55,19 @@ public class SpotsService {
     }
 
     
+    // 계절별 관광지 데이터를 가져오는 메소드
+    public List<TouristSpot> getSeasonalTouristSpots(String seasonKR) {
+        Pageable pageable = PageRequest.of(0, 6);  
+        List<TouristSpot> touristSpots = touristSpotRepository.findSeasonalTouristSpots(seasonKR, pageable);
+
+        // 구 이름을 한번에 가져오는 방법을 추가하거나, 여기서 각 관광지마다 구 이름을 설정
+        return touristSpots.stream()
+                .map(touristSpot -> {
+                    Optional<DistrictEntity> district = districtRepository.findByCode(touristSpot.getSigungucode());
+                    district.ifPresent(value -> touristSpot.setGuName(value.getName())); // 구 이름 설정
+                    return touristSpot;
+                })
+                .collect(Collectors.toList());
+    }
+    
 }
