@@ -1,8 +1,12 @@
 package com.helloseoul.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -55,19 +59,46 @@ public class SpotsService {
     }
 
     
-    // 계절별 관광지 데이터를 가져오는 메소드
     public List<TouristSpot> getSeasonalTouristSpots(String seasonKR) {
-        Pageable pageable = PageRequest.of(0, 6);  
-        List<TouristSpot> touristSpots = touristSpotRepository.findSeasonalTouristSpots(seasonKR, pageable);
+        List<Integer> targetMonths = new ArrayList<>();
 
-        // 구 이름을 한번에 가져오는 방법을 추가하거나, 여기서 각 관광지마다 구 이름을 설정
-        return touristSpots.stream()
-                .map(touristSpot -> {
-                    Optional<DistrictEntity> district = districtRepository.findByCode(touristSpot.getSigungucode());
-                    district.ifPresent(value -> touristSpot.setGuName(value.getName())); // 구 이름 설정
-                    return touristSpot;
-                })
-                .collect(Collectors.toList());
+        // 계절별 월 범위 설정
+        switch (seasonKR) {
+            case "봄": // 3, 4, 5월
+                targetMonths = Arrays.asList(3, 4, 5);
+                break;
+            case "여름": // 6, 7, 8월
+                targetMonths = Arrays.asList(6, 7, 8);
+                break;
+            case "가을": // 9, 10, 11월
+                targetMonths = Arrays.asList(9, 10, 11);
+                break;
+            case "겨울": // 12, 1, 2월
+                targetMonths = Arrays.asList(12, 1, 2);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid season: " + seasonKR);
+        }
+
+        // 페이징 처리
+        Pageable pageable = PageRequest.of(0, 6);  // 첫 번째 페이지, 6개 항목
+
+        // DB에서 해당 범위의 월을 포함한 레코드 조회
+        return touristSpotRepository.findSeasonalTouristSpotsByMonths(targetMonths, pageable);
     }
+
+    public List<TouristSpot> getSearchList(String searchQuery) {
+        return touristSpotRepository.findTouristSpotsBySearchQuery(searchQuery);
+    }
+    
+    
+    
+    // 상세 정보 조회 메소드
+    public TouristSpot getTouristSpotDetails(String  contentid) {
+        Optional<TouristSpot> touristSpot = touristSpotRepository.findByContentid(contentid);
+        // 관광지 정보가 있으면 반환, 없으면 null 반환
+        return touristSpot.orElse(new TouristSpot());
+    }
+
     
 }
