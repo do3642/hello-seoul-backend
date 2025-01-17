@@ -38,4 +38,18 @@ public class TouristSpotController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("지역 데이터 저장 중 오류가 발생했습니다.");
 	        }
 	    }
+	    
+	    @PostMapping("/api/touristdateSave")
+	    public ResponseEntity<String> fetchAndSaveTouristDateDetails() {
+	        try {
+	            touristSpotService.fetchAndSaveTouristDateDetails();
+	            return ResponseEntity.ok("날짜 관련 데이터 저장 성공!");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("날짜 관련 데이터 저장 중 오류가 발생했습니다.");
+	        }
+	    }
+	    
+	    
+	    
 	}
+
