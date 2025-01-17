@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.helloseoul.domain.DistrictEntity;
 import com.helloseoul.domain.TouristSpot;
+import com.helloseoul.dto.TouristSpotWithDateDTO;
 import com.helloseoul.repository.DistrictRepository;
 import com.helloseoul.repository.TouristSpotRepository;
 
@@ -94,11 +93,14 @@ public class SpotsService {
     
     
     // 상세 정보 조회 메소드
-    public TouristSpot getTouristSpotDetails(String  contentid) {
-        Optional<TouristSpot> touristSpot = touristSpotRepository.findByContentid(contentid);
-        // 관광지 정보가 있으면 반환, 없으면 null 반환
-        return touristSpot.orElse(new TouristSpot());
+ // 상세 정보 조회 메소드
+    public TouristSpotWithDateDTO getTouristSpotDetails(String contentid) {
+        Optional<TouristSpotWithDateDTO> touristSpotWithDate = touristSpotRepository.findTouristSpotWithDateByContentid(contentid);
+        
+        // 관광지와 날짜 정보가 있으면 DTO 반환, 없으면 null 반환
+        return touristSpotWithDate.orElse(new TouristSpotWithDateDTO());
     }
+
 
     
 }

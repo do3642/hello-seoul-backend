@@ -1,6 +1,5 @@
 package com.helloseoul.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.helloseoul.domain.TouristSpot;
+import com.helloseoul.dto.TouristSpotWithDateDTO;
 import com.helloseoul.service.SpotsService;
 
 @RestController
@@ -57,19 +57,20 @@ public class SpotsController {
 		
 	}
 	
-    @GetMapping("/tourist-detail/{contentid}")
-    public ResponseEntity<TouristSpot> getTouristSpotDetails(@PathVariable String  contentid) {
-        try {
-            TouristSpot touristSpot = spotsService.getTouristSpotDetails(contentid); // 서비스에서 상세 정보 조회
-   
-            if (touristSpot != null) {
-                return ResponseEntity.ok(touristSpot); // 데이터가 있으면 200 OK와 함께 반환
-            } else {
-                return ResponseEntity.notFound().build(); // 데이터가 없으면 404 Not Found 반환
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(null); // 예외 발생 시 500 서버 오류 반환
-        }
-    }
+	@GetMapping("/tourist-detail/{contentid}")
+	public ResponseEntity<TouristSpotWithDateDTO> getTouristSpotDetails(@PathVariable String contentid) {
+	    try {
+	        TouristSpotWithDateDTO touristSpotWithDate = spotsService.getTouristSpotDetails(contentid); // 서비스에서 상세 정보 조회
+	        System.out.println("이상한url일때 반환데이터확인" + touristSpotWithDate.getTouristSpot());
+	        if (touristSpotWithDate != null) {
+	            return ResponseEntity.ok(touristSpotWithDate); // 데이터가 있으면 200 OK와 함께 반환
+	        } else {
+	            return ResponseEntity.notFound().build(); // 데이터가 없으면 404 Not Found 반환
+	        }
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body(null); // 예외 발생 시 500 서버 오류 반환
+	    }
+	}
+
 
 }

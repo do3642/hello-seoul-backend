@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.helloseoul.domain.TouristSpot;
+import com.helloseoul.dto.TouristSpotWithDateDTO;
 
 @Repository
 public interface TouristSpotRepository extends JpaRepository<TouristSpot, Integer> {
@@ -54,8 +55,12 @@ public interface TouristSpotRepository extends JpaRepository<TouristSpot, Intege
 	// 검색 데이터 반환
 	@Query(value = "SELECT * FROM tourist_spot WHERE LOWER(title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) AND language_code = 'kor'", nativeQuery = true)
 	List<TouristSpot> findTouristSpotsBySearchQuery(@Param("searchQuery") String searchQuery);
-	
-	
-	Optional<TouristSpot> findByContentid(String  contentid);
+
+	// contentid로 관광지와 해당 날짜 정보를 조회합니다. TouristDate 정보가 없을 경우에도 TouristSpot은 조회됩니다.
+	@Query("SELECT new com.helloseoul.dto.TouristSpotWithDateDTO(ts, td) FROM TouristSpot ts " +
+	       "LEFT JOIN TouristDate td ON ts.contentid = td.contentid " +
+	       "WHERE ts.contentid = :contentid")
+	Optional<TouristSpotWithDateDTO> findTouristSpotWithDateByContentid(@Param("contentid") String contentid);
+
 
 }
