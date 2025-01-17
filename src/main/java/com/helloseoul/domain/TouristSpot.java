@@ -43,9 +43,9 @@ public class TouristSpot {
 	
 	private String firstimage2; // 대표 이미지(썸네일)(150*100)
 	
-	private double mapx; // GPS X좌표
+	private double mapx; // GPS X좌표(lon)
 	
-	private double mapy; // GPS Y좌표
+	private double mapy; // GPS Y좌표(lat)
 	
  
 
