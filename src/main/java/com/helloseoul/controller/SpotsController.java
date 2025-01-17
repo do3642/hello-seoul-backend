@@ -30,6 +30,7 @@ public class SpotsController {
 	public List<TouristSpot> getTouristSpots(@RequestParam("lang") String languageCode, @RequestParam("page") int page,
 			@RequestParam("size") int size,
 			@RequestParam(value = "excludeIds", required = false) List<Integer> excludeIds) {
+			System.out.println(languageCode);
 		return spotsService.getRandomTouristSpots(languageCode, page, size, excludeIds);
 	}
 
