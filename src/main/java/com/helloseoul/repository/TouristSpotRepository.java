@@ -14,17 +14,18 @@ import com.helloseoul.dto.TouristSpotWithDateDTO;
 
 @Repository
 public interface TouristSpotRepository extends JpaRepository<TouristSpot, Integer> {
-	
+
 	// 언어 코드로 검색하며 페이지네이션 지원
 	Page<TouristSpot> findByLanguageCode(String languageCode, Pageable pageable);
-	
+
 	// 언어 코드별 전체 관광지 데이터 조회
 	List<TouristSpot> findByLanguageCode(String languageCode);
-	   // 언어 코드 및 contenttypeid 조건에 따른 관광지 데이터 조회
-    @Query("SELECT t FROM TouristSpot t WHERE t.languageCode = :languageCode " +
-           "AND ((:languageCode = 'kor' AND t.contenttypeid IN (12, 15)) " +
-           "OR (:languageCode <> 'kor' AND t.contenttypeid IN (76, 85)))")
-    List<TouristSpot> findByLanguageCodeAndContentTypeId(@Param("languageCode") String languageCode);
+
+	// 언어 코드 및 contenttypeid 조건에 따른 관광지 데이터 조회
+	@Query("SELECT t FROM TouristSpot t WHERE t.languageCode = :languageCode "
+			+ "AND ((:languageCode = 'kor' AND t.contenttypeid IN (12, 15)) "
+			+ "OR (:languageCode <> 'kor' AND t.contenttypeid IN (76, 85)))")
+	List<TouristSpot> findByLanguageCodeAndContentTypeId(@Param("languageCode") String languageCode);
 
 	// contenttypeid가 12 또는 15인 데이터만 찾기
 	List<TouristSpot> findByContenttypeidIn(List<String> contentTypeIds);
@@ -68,12 +69,10 @@ public interface TouristSpotRepository extends JpaRepository<TouristSpot, Intege
 	List<TouristSpot> findTouristSpotsBySearchQuery(@Param("searchQuery") String searchQuery);
 
 	// contentid로 관광지와 해당 날짜 정보를 조회합니다. TouristDate 정보가 없을 경우에도 TouristSpot은 조회됩니다.
-	@Query("SELECT new com.helloseoul.dto.TouristSpotWithDateDTO(ts, td) FROM TouristSpot ts " +
-	       "LEFT JOIN TouristDate td ON ts.contentid = td.contentid " +
-	       "WHERE ts.contentid = :contentid")
+	@Query("SELECT new com.helloseoul.dto.TouristSpotWithDateDTO(ts, td) FROM TouristSpot ts "
+			+ "LEFT JOIN TouristDate td ON ts.contentid = td.contentid " + "WHERE ts.contentid = :contentid")
 	Optional<TouristSpotWithDateDTO> findTouristSpotWithDateByContentid(@Param("contentid") String contentid);
 
-	// 구 이름이나 관광지 이름에 대해 LIKE 검색을 하고 페이징 처리
-	Page<TouristSpot> findByTitleContainingOrGuNameContaining(String keyword, Pageable pageable);
+	Page<TouristSpot> findByTitleContaining(String title, Pageable pageable);
 
 }

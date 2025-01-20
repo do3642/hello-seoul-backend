@@ -81,15 +81,22 @@ public class TouristSpotController {
 	        }
 	    }
 	    
-	    @GetMapping("/tourist-spots/search")
-	    public Page<TouristSpot> searchTouristSpots(
-	            @RequestParam(required = false, defaultValue = "") String keyword,
-	            @RequestParam(defaultValue = "0") int page,
-	            @RequestParam(defaultValue = "10") int size) {
-
-	        // 검색어와 페이징을 기반으로 관광지 목록 반환
-	        return touristSpotService.searchTouristSpots(keyword, page, size);
+	    @GetMapping("/mapSearch")
+	    public ResponseEntity<List<TouristSpot>> mapSearchTouristSpots(
+	        @RequestParam String query, 
+	        @RequestParam(defaultValue = "0") int page, 
+	        @RequestParam(defaultValue = "10") int size
+	    ) {
+	        try {
+	            // 쿼리 파라미터로 전달된 검색어를 기준으로 관광지 검색
+	            List<TouristSpot> touristSpots = touristSpotService.mapSearchTouristSpots(query, page, size);
+	            return ResponseEntity.ok(touristSpots);
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	        }
 	    }
+	    
+	    
 	    
 	}
 
