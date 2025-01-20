@@ -119,7 +119,7 @@ public class TouristSpotService {
 	}
 	
 	public List<TouristSpot> getTouristSpot(String languageCode) {
-		return touristSpotRepository.findByLanguageCode(languageCode);
+		return touristSpotRepository.findByLanguageCodeAndContentTypeId(languageCode);
 	}
 
 	
