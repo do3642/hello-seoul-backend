@@ -73,5 +73,7 @@ public interface TouristSpotRepository extends JpaRepository<TouristSpot, Intege
 	       "WHERE ts.contentid = :contentid")
 	Optional<TouristSpotWithDateDTO> findTouristSpotWithDateByContentid(@Param("contentid") String contentid);
 
+	// 구 이름이나 관광지 이름에 대해 LIKE 검색을 하고 페이징 처리
+	Page<TouristSpot> findByTitleContainingOrGuNameContaining(String keyword, Pageable pageable);
 
 }

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
@@ -120,6 +122,18 @@ public class TouristSpotService {
 	
 	public List<TouristSpot> getTouristSpot(String languageCode) {
 		return touristSpotRepository.findByLanguageCodeAndContentTypeId(languageCode);
+	}
+	
+	public Page<TouristSpot> searchTouristSpots(String keyword, int page, int size) {
+		// 검색 키워드가 없으면 기본적으로 모든 관광지를 반환
+		String searchKeyword = keyword == null || keyword.trim().isEmpty() ? "" : keyword ;
+		
+		// 페이징 객체 생성
+		Pageable pageable = PageRequest.of(page, size);
+		
+		// 검색 조건에 맞는 관광지 목록 반환
+		return touristSpotRepository.findByTitleContainingOrGuNameContaining(searchKeyword, pageable);
+		
 	}
 
 	
