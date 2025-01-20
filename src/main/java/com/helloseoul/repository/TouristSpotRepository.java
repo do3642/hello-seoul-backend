@@ -2,7 +2,7 @@ package com.helloseoul.repository;
 
 import java.util.List;
 import java.util.Optional;
-
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +14,17 @@ import com.helloseoul.dto.TouristSpotWithDateDTO;
 
 @Repository
 public interface TouristSpotRepository extends JpaRepository<TouristSpot, Integer> {
+	
+	// 언어 코드로 검색하며 페이지네이션 지원
+	Page<TouristSpot> findByLanguageCode(String languageCode, Pageable pageable);
+	
+	// 언어 코드별 전체 관광지 데이터 조회
+	List<TouristSpot> findByLanguageCode(String languageCode);
+	   // 언어 코드 및 contenttypeid 조건에 따른 관광지 데이터 조회
+    @Query("SELECT t FROM TouristSpot t WHERE t.languageCode = :languageCode " +
+           "AND ((:languageCode = 'kor' AND t.contenttypeid IN (12, 15)) " +
+           "OR (:languageCode <> 'kor' AND t.contenttypeid IN (76, 85)))")
+    List<TouristSpot> findByLanguageCodeAndContentTypeId(@Param("languageCode") String languageCode);
 
 	// contenttypeid가 12 또는 15인 데이터만 찾기
 	List<TouristSpot> findByContenttypeidIn(List<String> contentTypeIds);

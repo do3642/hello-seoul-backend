@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,6 +56,7 @@ public class TouristSpotService {
 		}
 	}
 	
+	// 언어 코드에 맞는 데이터를 저장
 	public void fetchAndSaveTouristSpots(String languageCode) {
 		String apiUrl = getApiUrl(languageCode);
 		
@@ -109,7 +112,16 @@ public class TouristSpotService {
 		}
 	}
 	
+	public Page<TouristSpot> getTouristSpotsByLanguage(String languageCode, int page, int size) {
+		// DB에서 언어 코드에 맞는 데이터를 조회.
+		// 페이지네이션이 적용된 관광지 데이터를 반환
+		return touristSpotRepository.findByLanguageCode(languageCode, PageRequest.of(page, size));
+	}
 	
+	public List<TouristSpot> getTouristSpot(String languageCode) {
+		return touristSpotRepository.findByLanguageCodeAndContentTypeId(languageCode);
+	}
+
 	
 	public void fetchAndSaveTouristDateDetails() {
 	    System.out.println("1. TouristSpot 데이터 가져오기 시작...");
@@ -220,4 +232,5 @@ public class TouristSpotService {
 	
 
   }
+
 
