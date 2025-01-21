@@ -1,6 +1,8 @@
 package com.helloseoul.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,20 +84,27 @@ public class TouristSpotController {
 	    }
 	    
 	    @GetMapping("/mapSearch")
-	    public ResponseEntity<List<TouristSpot>> mapSearchTouristSpots(
-	        @RequestParam String query, 
-	        @RequestParam(defaultValue = "0") int page, 
+	    public ResponseEntity<Page<TouristSpot>> mapSearchTouristSpots(
+	    	@RequestParam String languageCode, // 언어 코드 필수
+	        @RequestParam(required = false) String query,
+	        @RequestParam(defaultValue = "0") int page,
 	        @RequestParam(defaultValue = "10") int size
 	    ) {
 	        try {
-	            // 쿼리 파라미터로 전달된 검색어를 기준으로 관광지 검색
-	            List<TouristSpot> touristSpots = touristSpotService.mapSearchTouristSpots(query, page, size);
-	            return ResponseEntity.ok(touristSpots);
+	            Page<TouristSpot> touristSpotPage;
+	            // 검색어가 없으면 전체 데이터를 반환
+	            if (query == null || query.isEmpty()) {
+	                touristSpotPage = touristSpotService.getTouristSpotsByLanguage(languageCode, page, size);
+	            } else {
+	                touristSpotPage = touristSpotService.mapSearchTouristSpots(query, page, size);
+	            }
+
+	            return ResponseEntity.ok(touristSpotPage);
 	        } catch (Exception e) {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	        }
 	    }
-	    
+
 	    
 	    
 	}

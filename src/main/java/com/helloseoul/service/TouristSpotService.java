@@ -242,11 +242,9 @@ public class TouristSpotService {
 	}
 
 	// 검색어로 관광지 검색
-	public List<TouristSpot> mapSearchTouristSpots(String query, int page, int size) {
+	public Page<TouristSpot> mapSearchTouristSpots(String query, int page, int size) {
 		// PageRequest를 이용해 페이지네이션 처리
-		Page<TouristSpot> touristSpotPage = touristSpotRepository.findByTitleContaining(query,
-				PageRequest.of(page, size)); // 쿼리로 이름 포함 검색
-		return touristSpotPage.getContent();
+		return touristSpotRepository.findByTitleContaining(query, PageRequest.of(page, size));
 	}
 
 }
