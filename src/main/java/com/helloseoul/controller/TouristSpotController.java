@@ -1,13 +1,17 @@
 package com.helloseoul.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +20,7 @@ import com.helloseoul.service.DistrictService;
 import com.helloseoul.service.TouristSpotService;
 
 @RestController
+@RequestMapping("/api")
 public class TouristSpotController {
 
 	    @Autowired
@@ -25,7 +30,7 @@ public class TouristSpotController {
 	    private DistrictService districtService;
 		
 	    // 데이터 저장 시: 언어 코드 필수
-	    @PostMapping("/api/touristspot")
+	    @PostMapping("/touristspot")
 	    public ResponseEntity<String> fetchAndSaveTouristSpots(@RequestParam String languageCode) {
 	        try {
 	            touristSpotService.fetchAndSaveTouristSpots(languageCode);
@@ -36,7 +41,7 @@ public class TouristSpotController {
 	    }
 	    
 	    // 데이터 조회 시: 해당 언어 코드에 맞는 모든 관광지 데이터 반환(페이지네이션 포함)
-	    @GetMapping("/api/touristspotdata")
+	    @GetMapping("/touristspotdata")
 	    public ResponseEntity<Page<TouristSpot>> getTouristSpots(
 	    		@RequestParam String languageCode,
 	    		@RequestParam(defaultValue = "0") int page,
@@ -52,13 +57,13 @@ public class TouristSpotController {
 	    }
 	    
 	    // 데이터 조회 시 : 언어코드에 맞는 전체 관광지 데이터 반환(페이지네이션 x)
-	    @GetMapping("/api/alltouristspotdata")
+	    @GetMapping("/alltouristspotdata")
 	    public ResponseEntity<List<TouristSpot>> getAllTouristSpots (@RequestParam String languageCode) {
 	    	List<TouristSpot> spots = touristSpotService.getTouristSpot(languageCode);
 	    	return ResponseEntity.ok(spots);
 	    }
 
-	    @PostMapping("/api/districts")
+	    @PostMapping("/districts")
 	    public ResponseEntity<String> fetchAndSaveDistricts() {
 	        try {
 	            districtService.fetchAndSaveDistricts();
@@ -68,7 +73,7 @@ public class TouristSpotController {
 	        }
 	    }
 	    
-	    @PostMapping("/api/touristdateSave")
+	    @PostMapping("/touristdateSave")
 	    public ResponseEntity<String> fetchAndSaveTouristDateDetails() {
 	        try {
 	            touristSpotService.fetchAndSaveTouristDateDetails();
@@ -78,6 +83,28 @@ public class TouristSpotController {
 	        }
 	    }
 	    
+	    @GetMapping("/mapSearch")
+	    public ResponseEntity<Page<TouristSpot>> mapSearchTouristSpots(
+	    	@RequestParam String languageCode, // 언어 코드 필수
+	        @RequestParam(required = false) String query,
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size
+	    ) {
+	        try {
+	            Page<TouristSpot> touristSpotPage;
+	            // 검색어가 없으면 전체 데이터를 반환
+	            if (query == null || query.isEmpty()) {
+	                touristSpotPage = touristSpotService.getTouristSpotsByLanguage(languageCode, page, size);
+	            } else {
+	                touristSpotPage = touristSpotService.mapSearchTouristSpots(query, page, size);
+	            }
+
+	            return ResponseEntity.ok(touristSpotPage);
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	        }
+	    }
+
 	    
 	    
 	}
